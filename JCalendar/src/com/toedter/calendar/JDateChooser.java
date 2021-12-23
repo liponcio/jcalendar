@@ -211,9 +211,6 @@ public class JDateChooser extends JPanel implements ActionListener,
 		calendarButton.setMargin(new Insets(0, 0, 0, 0));
 		calendarButton.addActionListener(this);
 
-		// Alt + 'C' selects the calendar.
-		calendarButton.setMnemonic(KeyEvent.VK_C);
-
 		add(calendarButton, BorderLayout.EAST);
 		add(this.dateEditor.getUiComponent(), BorderLayout.CENTER);
 
@@ -559,6 +556,15 @@ public class JDateChooser extends JPanel implements ActionListener,
 		}
 		return super.requestFocusInWindow();
 	}
+	
+	/**
+	 * Sets a Mnemonic for the calendar.<br>
+	 * With a mnemonic you can open the calendar with {ALT+ 'THE KEY'}.
+	 * @param keyEvent int with a key from {@link KeyEvent}
+	 */
+	public void setMnemonic(int keyEvent){
+		calendarButton.setMnemonic(keyEvent);
+	}
 
 	/**
 	 * Creates a JFrame with a JDateChooser inside and can be used for testing.
@@ -614,6 +620,7 @@ public class JDateChooser extends JPanel implements ActionListener,
 		frame.setVisible(true);
 
 		dateChooser.requestFocusInWindow();
+		dateChooser.setMnemonic(KeyEvent.VK_N);
 	}
 
 }
