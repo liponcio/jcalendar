@@ -23,8 +23,8 @@ package com.toedter.calendar;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -45,6 +45,7 @@ import com.toedter.components.UTF8ResourceBundle;
  * JCalendar is a bean for entering a date by choosing the year, month and day.
  * 
  * @author Kai Toedter
+ * @author dadiguiApps
  * @version $LastChangedRevision$
  * @version $LastChangedDate$
  */
@@ -61,6 +62,7 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 	private final String defaultNullDateButtonText = "No Date";
 	private String todayButtonText;
 	private String nullDateButtonText;
+	private boolean invertedButtons = false;
 
 	/** the day chooser */
 	protected JDayChooser dayChooser;
@@ -204,10 +206,11 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 
 		monthChooser = new JMonthChooser(monthSpinner);
 		yearChooser = new JYearChooser();
+		yearChooser.setPreferredSize(new Dimension(60, 0));
 		monthChooser.setYearChooser(yearChooser);
 		monthChooser.setLocale(this.locale);
 		monthYearPanel.add(monthChooser, BorderLayout.WEST);
-		monthYearPanel.add(yearChooser, BorderLayout.CENTER);
+		monthYearPanel.add(yearChooser, BorderLayout.EAST);
 		monthYearPanel.setBorder(BorderFactory.createEmptyBorder());
 
 		dayChooser = new JDayChooser(weekOfYearVisible);
@@ -257,9 +260,22 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 	 *            The command line arguments
 	 */
 	public static void main(String[] s) {
+		try {
+			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+				if ("Nimbus".equals(info.getName())) {
+					javax.swing.UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+			System.out.println(ex);
+		}
 		JFrame frame = new JFrame("JCalendar");
 
 		JCalendar jcalendar = new JCalendar();
+		jcalendar.setNullDateButtonVisible(true);
+		jcalendar.setTodayButtonVisible(true);
+		jcalendar.setInvertedButtons(true);
 		frame.getContentPane().add(jcalendar);
 		frame.pack();
 		frame.setVisible(true);
@@ -780,12 +796,12 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 			buttonCount++;
 		}
 
-		specialButtonPanel.setLayout(new GridLayout(1, buttonCount));
+		specialButtonPanel.setLayout(new BorderLayout());
 		if (isTodayButtonVisible) {
-			specialButtonPanel.add(todayButton);
+			specialButtonPanel.add(todayButton, invertedButtons ? BorderLayout.EAST : BorderLayout.WEST);
 		}
 		if (isNullDateButtonVisible) {
-			specialButtonPanel.add(nullDateButton);
+			specialButtonPanel.add(nullDateButton, invertedButtons ? BorderLayout.WEST: BorderLayout.EAST);
 		}
 
 		specialButtonPanel.setVisible(isNullDateButtonVisible
@@ -844,6 +860,24 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 		} else {
 			this.nullDateButtonText = nullDateButtonText;
 		}
+		relayoutSpecialButtonPanel();
+	}
+	
+	/**
+	 *
+	 * @return true if buttons are inverted , false otherwise
+	 */
+	public boolean isInvertedButtons() {
+		return invertedButtons;
+	}
+	
+	/**
+	 * Allows to invert the Today and Null buttons.<br>
+	 * Inverted buttons become null button on the left and today on the right
+	 * @param invertedButtons boolean false by default
+	 */
+	public void setInvertedButtons(boolean invertedButtons) {
+		this.invertedButtons = invertedButtons;
 		relayoutSpecialButtonPanel();
 	}
 }
