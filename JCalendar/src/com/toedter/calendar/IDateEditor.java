@@ -176,4 +176,12 @@ public interface IDateEditor {
 	 *            the listener
 	 */
 	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener);
+	
+	/**
+	 * Informs if the selected date is valid or not.<br>
+	 * Even if the {@link #setMaxSelectableDate(Date)} or the {@link #setMinSelectableDate(Date)} is defined the user can write a new date
+	 * outside the boundries which would be an invalid Date.
+	 * @return true in case of a valid date, false otherwise
+	 */
+	boolean isValidDate();
 }

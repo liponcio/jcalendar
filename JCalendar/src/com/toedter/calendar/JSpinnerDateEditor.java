@@ -146,7 +146,12 @@ public class JSpinnerDateEditor extends JSpinner implements IDateEditor,
 					UIManager.getColor("TextField.inactiveBackground"));
 		}
 	}
-
+	
+	@Override
+	public boolean isValidDate() {
+		return true;
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.toedter.calendar.IDateEditor#getMaxSelectableDate()
 	 */

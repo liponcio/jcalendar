@@ -87,7 +87,9 @@ public class JTextFieldDateEditor extends JFormattedTextField implements IDateEd
 	private int millis;
 
 	private Calendar calendar;
-
+	
+	private boolean validDate;
+	
 	public JTextFieldDateEditor() {
 		this(false, null, null, ' ');
 	}
@@ -252,8 +254,10 @@ public class JTextFieldDateEditor extends JFormattedTextField implements IDateEd
 			Date date = dateFormatter.parse(getText());
 			if (dateUtil.checkDate(date)) {
 				setForeground(darkGreen);
+				validDate = true;
 			} else {
 				setForeground(Color.RED);
+				validDate = false;
 			}
 		} catch (Exception e) {
 			setForeground(Color.RED);
@@ -442,7 +446,12 @@ public class JTextFieldDateEditor extends JFormattedTextField implements IDateEd
 		dateUtil.setSelectableDateRange(min, max);
 		checkText();
 	}
-
+	
+	@Override
+	public boolean isValidDate() {
+		return validDate;
+	}
+	
 	/**
 	 * Creates a JFrame with a JCalendar inside and can be used for testing.
 	 * 
