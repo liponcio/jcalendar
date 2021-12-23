@@ -37,6 +37,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
@@ -568,6 +569,11 @@ public class JDateChooser extends JPanel implements ActionListener,
 	public static void main(String[] s) {
 		JFrame frame = new JFrame("JDateChooser");
 		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setLocale(new Locale("pt", "PT"));
+		dateChooser.setDateFormatString("yyyy-MM-dd");
+		dateChooser.setMinSelectableDate(new Date(121,11,5));
+		dateChooser.setMaxSelectableDate(new Date(121, 11, 25));
+		
 		// JDateChooser dateChooser = new JDateChooser(null, new Date(), null,
 		// null);
 		// dateChooser.setLocale(new Locale("de"));
@@ -582,8 +588,29 @@ public class JDateChooser extends JPanel implements ActionListener,
 		// ImageIcon icon = new ImageIcon(iconURL);
 		// dateChooser.setIcon(icon);
 
-		frame.getContentPane().add(dateChooser);
+		JButton btn = new JButton("validate");
+		btn.addActionListener(e -> {
+			JOptionPane.showMessageDialog(null, "Date is valid? " + dateChooser.getDateEditor().isValidDate());
+		});
+		
+		
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(frame.getContentPane());
+		frame.getContentPane().setLayout(layout);
+		layout.setHorizontalGroup(
+				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+						.addComponent(dateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addComponent(btn)
+		);
+		layout.setVerticalGroup(
+				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup()
+								.addComponent(dateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+								.addComponent(btn))
+		);
+		
 		frame.pack();
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
 		dateChooser.requestFocusInWindow();
