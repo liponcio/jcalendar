@@ -28,7 +28,9 @@ import javax.swing.JFrame;
 
 
 /**
- * JYearChooser is a bean for choosing a year.
+ * JYearChooser is a bean for choosing a year.<br>
+ * Sets the minimum year to 1900 and maximum year to 2100.<br>
+ * Those limits can still be changed with {@link #setStartYear(int) a new minimum} and {@link #setEndYear(int) a new maximum}
  *
  * @version $LastChangedRevision$
  * @version $LastChangedDate$
@@ -37,8 +39,6 @@ public class JYearChooser extends JSpinField {
 	private static final long serialVersionUID = 2648810220491090064L;
 	protected JDayChooser dayChooser;
     protected int oldYear;
-    protected int startYear;
-    protected int endYear;
 
     /**
      * Default JCalendar constructor.
@@ -47,8 +47,8 @@ public class JYearChooser extends JSpinField {
         setName("JYearChooser");
         Calendar calendar = Calendar.getInstance();
         dayChooser = null;
-        setMinimum(calendar.getMinimum(Calendar.YEAR));
-        setMaximum(calendar.getMaximum(Calendar.YEAR));
+        setMinimum(1900);
+        setMaximum(2100);
         setValue(calendar.get(Calendar.YEAR));
     }
 
@@ -66,7 +66,7 @@ public class JYearChooser extends JSpinField {
             dayChooser.setYear(value);
         }
 
-        spinner.setValue(new Integer(value));
+        spinner.setValue(value);
         firePropertyChange("year", oldYear, value);
         oldYear = value;
     }
@@ -76,6 +76,7 @@ public class JYearChooser extends JSpinField {
      *
      * @param value the year value
      */
+    @Override
     public void setValue(int value) {
         setYear(value);
     }
@@ -139,7 +140,7 @@ public class JYearChooser extends JSpinField {
      *
      * @param s command line arguments
      */
-    static public void main(String[] s) {
+    public static void main(String[] s) {
         JFrame frame = new JFrame("JYearChooser");
         frame.getContentPane().add(new JYearChooser());
         frame.pack();
