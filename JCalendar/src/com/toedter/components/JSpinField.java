@@ -30,6 +30,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -101,10 +103,20 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 		textField.setBorder(BorderFactory.createEmptyBorder());
 		textField.setText(Integer.toString(value));
 		textField.addFocusListener(this);
+		textField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c < '0' || c > '9' && c != KeyEvent.VK_DELETE) {
+					e.consume();
+				}
+			}
+		});
 		spinner = new JSpinner() {
 			private static final long serialVersionUID = -6287709243342021172L;
 			private JTextField textField = new JTextField();
-
+			
+			@Override
 			public Dimension getPreferredSize() {
 				Dimension size = super.getPreferredSize();
 				return new Dimension(size.width, textField.getPreferredSize().height);
